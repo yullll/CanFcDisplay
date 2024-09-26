@@ -321,7 +321,7 @@ void MainWindow::on_pushButtonSerial_clicked(bool checked)
         ByteCount = 0;
      }
 }
-//开机按钮设置
+//开机按钮设置槽函数
 void MainWindow::on_pushButtonPowerOn_clicked(bool checked)
 {
     if(serialIsOpen==true){
