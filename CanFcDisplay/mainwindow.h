@@ -2,12 +2,16 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "QFile"
 #include "QSerialPort"
 #include "QSerialPortInfo"
 #include "QMessageBox"
 #include <QDebug>
 #include "QTimer"
 #include<QButtonGroup>
+#include "QTextStream"
+#include "QTextCodec"
+#include <exception>
 
 namespace Ui {
 class MainWindow;
@@ -62,15 +66,21 @@ private:
     Ui::MainWindow *ui;
     //私有变量
     bool serialIsOpen;
-    uint8_t powerOnDataSend;
+    char powerOnDataSend;
+    QByteArray dataSendByteArray;
+    uint16_t CAN_ID;
+    long ByteCount;
+    uint run_time_count;
+    int PowerOnFlag;
+    int PowerOffFlag;
+    int FCParameterNewFlag;
+    int FCStatusNewFlag;
     //私有对象
     QTimer *tim;
     QTimer *timSend;
     QSerialPort serial;
-    uint run_time_count;
     QString run_time;
-    uint16_t CAN_ID;
-    unsigned int ByteCount;
+    QFile file_;
     QButtonGroup* ButtonGroupFC1UnderVoltage;
     QButtonGroup* ButtonGroupFC2UnderVoltage;
     QButtonGroup* ButtonGroupFC1HighTemperature;
@@ -95,6 +105,7 @@ private:
     void Refresh_Data_Parameter(dataFCParameter data);
     void Refresh_Data_Status(dataFCStatus data);
     void creatButtonGroup();
+    void SaveDatatoCsv(dataFCParameter dataP,dataFCStatus dataS);
 private slots:
     void on_pushButtonSerial_clicked(bool checked);
     void on_pushButtonPowerOn_clicked(bool checked);

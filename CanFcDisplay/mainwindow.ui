@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>864</width>
-    <height>443</height>
+    <width>1027</width>
+    <height>513</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -61,7 +61,7 @@
     <item row="3" column="3">
      <widget class="QGroupBox" name="gridGroupBox">
       <property name="title">
-       <string>2号电堆</string>
+       <string>4号电堆</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_9">
        <item row="1" column="0">
@@ -218,6 +218,13 @@
              </widget>
             </item>
             <item>
+             <widget class="QRadioButton" name="FC2UnderVoltageError">
+              <property name="text">
+               <string>数据异常</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="verticalSpacer_9">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -259,6 +266,13 @@
              <widget class="QRadioButton" name="FC2HighTemperature2">
               <property name="text">
                <string>故障</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="FC2HighTemperatureError">
+              <property name="text">
+               <string>数据异常</string>
               </property>
              </widget>
             </item>
@@ -308,6 +322,13 @@
              </widget>
             </item>
             <item>
+             <widget class="QRadioButton" name="FC2LowPressureError">
+              <property name="text">
+               <string>数据异常</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="verticalSpacer_16">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -342,6 +363,13 @@
              <widget class="QRadioButton" name="FC2FanStatus1">
               <property name="text">
                <string>预警</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="FC2FanStatusError">
+              <property name="text">
+               <string>数据异常</string>
               </property>
              </widget>
             </item>
@@ -496,6 +524,13 @@
              </widget>
             </item>
             <item>
+             <widget class="QRadioButton" name="FC2OutValveStatusError">
+              <property name="text">
+               <string>数据异常</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="verticalSpacer_7">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -541,6 +576,13 @@
              </widget>
             </item>
             <item>
+             <widget class="QRadioButton" name="FC2HydrogenLeaksError">
+              <property name="text">
+               <string>数据异常</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="verticalSpacer_8">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -575,6 +617,13 @@
              <widget class="QRadioButton" name="FC2InValveStatus1">
               <property name="text">
                <string>开启</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="FC2InValveStatusError">
+              <property name="text">
+               <string>数据异常</string>
               </property>
              </widget>
             </item>
@@ -908,6 +957,13 @@
              </widget>
             </item>
             <item>
+             <widget class="QRadioButton" name="FC1UnderVoltageError">
+              <property name="text">
+               <string>数据异常</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="verticalSpacer_4">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -953,6 +1009,13 @@
              </widget>
             </item>
             <item>
+             <widget class="QRadioButton" name="FC1HighTemperatureError">
+              <property name="text">
+               <string>数据异常</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="verticalSpacer_5">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -987,6 +1050,13 @@
              <widget class="QRadioButton" name="FC1FanStatus1">
               <property name="text">
                <string>预警</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="FC1FanStatusError">
+              <property name="text">
+               <string>数据异常</string>
               </property>
              </widget>
             </item>
@@ -1032,6 +1102,13 @@
              <widget class="QRadioButton" name="FC1LowPressure2">
               <property name="text">
                <string>故障</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="FC1LowPressureError">
+              <property name="text">
+               <string>数据异常</string>
               </property>
              </widget>
             </item>
@@ -1098,6 +1175,13 @@
                </widget>
               </item>
               <item>
+               <widget class="QRadioButton" name="FC1InValveStatusError">
+                <property name="text">
+                 <string>数据异常</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <spacer name="verticalSpacer_3">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
@@ -1143,6 +1227,13 @@
                </widget>
               </item>
               <item>
+               <widget class="QRadioButton" name="FC1HydrogenLeaksError">
+                <property name="text">
+                 <string>数据异常</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <spacer name="verticalSpacer">
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
@@ -1177,6 +1268,13 @@
                <widget class="QRadioButton" name="FC1OutValveStatus1">
                 <property name="text">
                  <string>开启</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="FC1OutValveStatusError">
+                <property name="text">
+                 <string>数据异常</string>
                 </property>
                </widget>
               </item>

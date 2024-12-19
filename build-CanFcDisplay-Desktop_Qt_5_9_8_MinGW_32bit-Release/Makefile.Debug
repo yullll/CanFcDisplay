@@ -11,19 +11,19 @@ MAKEFILE      = Makefile.Debug
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DUNICODE -D_UNICODE -DWIN32 -DQT_DEPRECATED_WARNINGS -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_SERIALPORT_LIB -DQT_CORE_LIB -DQT_NEEDS_QMAIN
+DEFINES       = -DUNICODE -D_UNICODE -DWIN32 -DQT_DEPRECATED_WARNINGS -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_SERIALPORT_LIB -DQT_CORE_LIB
 CFLAGS        = -fno-keep-inline-dllexport -g -Wall -W -Wextra $(DEFINES)
-CXXFLAGS      = -fno-keep-inline-dllexport -g -std=gnu++11 -Wall -W -Wextra -fexceptions -mthreads $(DEFINES)
+CXXFLAGS      = -fno-keep-inline-dllexport -fexceptions -g -std=gnu++11 -Wall -W -Wextra -mthreads $(DEFINES)
 INCPATH       = -I..\CanFcDisplay -I. -ID:\SoftWare\QT\5.9.8\mingw53_32\include -ID:\SoftWare\QT\5.9.8\mingw53_32\include\QtWidgets -ID:\SoftWare\QT\5.9.8\mingw53_32\include\QtGui -ID:\SoftWare\QT\5.9.8\mingw53_32\include\QtANGLE -ID:\SoftWare\QT\5.9.8\mingw53_32\include\QtSerialPort -ID:\SoftWare\QT\5.9.8\mingw53_32\include\QtCore -Idebug -I. -ID:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\win32-g++ 
 LINKER      =        g++
-LFLAGS        =        -Wl,-subsystem,windows -mthreads
-LIBS        =        -lmingw32 -LD:\SoftWare\QT\5.9.8\mingw53_32\lib D:\SoftWare\QT\5.9.8\mingw53_32\lib\libqtmaind.a -LC:\openssl\lib -LC:\Utils\my_sql\my_sql\lib -LC:\Utils\postgresql\pgsql\lib -lshell32 D:\SoftWare\QT\5.9.8\mingw53_32\lib\libQt5Widgetsd.a D:\SoftWare\QT\5.9.8\mingw53_32\lib\libQt5Guid.a D:\SoftWare\QT\5.9.8\mingw53_32\lib\libQt5SerialPortd.a D:\SoftWare\QT\5.9.8\mingw53_32\lib\libQt5Cored.a 
+LFLAGS        =        -Wl,-subsystem,console -mthreads
+LIBS        =        -LD:\SoftWare\QT\5.9.8\mingw53_32\lib D:\SoftWare\QT\5.9.8\mingw53_32\lib\libQt5Widgetsd.a D:\SoftWare\QT\5.9.8\mingw53_32\lib\libQt5Guid.a D:\SoftWare\QT\5.9.8\mingw53_32\lib\libQt5SerialPortd.a D:\SoftWare\QT\5.9.8\mingw53_32\lib\libQt5Cored.a debug\logo_res.o 
 QMAKE         = D:\SoftWare\QT\5.9.8\mingw53_32\bin\qmake.exe
 IDC           = idc
 IDL           = midl
 ZIP           = zip -r -9
 DEF_FILE      = 
-RES_FILE      = 
+RES_FILE      = debug\logo_res.o
 COPY          = copy /y
 SED           = $(QMAKE) -install sed
 COPY_FILE     = copy /y
@@ -46,12 +46,14 @@ OBJECTS_DIR   = debug
 ####### Files
 
 SOURCES       = ..\CanFcDisplay\main.cpp \
-		..\CanFcDisplay\mainwindow.cpp debug\moc_mainwindow.cpp
+		..\CanFcDisplay\mainwindow.cpp debug\qrc_img.cpp \
+		debug\moc_mainwindow.cpp
 OBJECTS       = debug/main.o \
 		debug/mainwindow.o \
+		debug/qrc_img.o \
 		debug/moc_mainwindow.o
 
-DIST          =  ..\CanFcDisplay\mainwindow.h ..\CanFcDisplay\main.cpp \
+DIST          = logo.rc ..\CanFcDisplay\mainwindow.h ..\CanFcDisplay\main.cpp \
 		..\CanFcDisplay\mainwindow.cpp
 QMAKE_TARGET  = CanFcDisplay
 DESTDIR        = debug\ #avoid trailing-slash linebreak
@@ -63,8 +65,11 @@ DESTDIR_TARGET = debug\CanFcDisplay.exe
 first: all
 all: Makefile.Debug  $(DESTDIR_TARGET)
 
-$(DESTDIR_TARGET): ui_mainwindow.h $(OBJECTS) 
+$(DESTDIR_TARGET): ui_mainwindow.h $(OBJECTS) debug/logo_res.o
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) $(OBJECTS)  $(LIBS)
+
+debug/logo_res.o: ../CanFcDisplay/logo.rc
+	windres -i ..\CanFcDisplay\logo.rc -o debug\logo_res.o --include-dir=./../CanFcDisplay $(DEFINES)
 
 qmake: FORCE
 	@$(QMAKE) -o Makefile.Debug ..\CanFcDisplay\CanFcDisplay.pro -spec win32-g++
@@ -72,10 +77,11 @@ qmake: FORCE
 qmake_all: FORCE
 
 dist:
-	$(ZIP) CanFcDisplay.zip $(SOURCES) $(DIST) ..\CanFcDisplay\CanFcDisplay.pro D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\spec_pre.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\qdevice.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\device_config.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\common\sanitize.conf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\common\gcc-base.conf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\common\g++-base.conf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\common\angle.conf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\qconfig.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3danimation.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3danimation_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dcore.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dcore_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dextras.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dextras_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dinput.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dinput_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dlogic.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dlogic_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquick.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquick_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickanimation.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickanimation_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickextras.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickextras_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickinput.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickinput_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickrender.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickrender_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickscene2d.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickscene2d_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3drender.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3drender_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_accessibility_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_axbase.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_axbase_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_axcontainer.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_axcontainer_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_axserver.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_axserver_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_bluetooth.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_bluetooth_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_bootstrap_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_charts.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_charts_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_concurrent.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_concurrent_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_core.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_core_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_datavisualization.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_datavisualization_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_dbus.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_dbus_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_designer.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_designer_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_designercomponents_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_devicediscovery_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_egl_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_eventdispatcher_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_fb_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_fontdatabase_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_gamepad.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_gamepad_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_gui.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_gui_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_help.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_help_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_location.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_location_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_multimedia.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_multimedia_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_multimediawidgets.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_multimediawidgets_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_network.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_network_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_networkauth.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_networkauth_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_nfc.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_nfc_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_opengl.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_opengl_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_openglextensions.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_openglextensions_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_packetprotocol_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_platformcompositor_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_positioning.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_positioning_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_printsupport.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_printsupport_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_purchasing.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_purchasing_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_qml.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_qml_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_qmldebug_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_qmldevtools_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_qmltest.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_qmltest_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quick.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quick_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quickcontrols2.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quickcontrols2_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quickparticles_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quicktemplates2_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quickwidgets.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quickwidgets_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_remoteobjects.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_remoteobjects_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_repparser.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_repparser_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_script.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_script_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_scripttools.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_scripttools_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_scxml.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_scxml_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_sensors.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_sensors_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_serialbus.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_serialbus_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_serialport.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_serialport_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_sql.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_sql_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_svg.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_svg_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_testlib.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_testlib_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_texttospeech.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_texttospeech_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_theme_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_uiplugin.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_uitools.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_uitools_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_webchannel.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_webchannel_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_websockets.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_websockets_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_widgets.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_widgets_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_winextras.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_winextras_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_xml.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_xml_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_xmlpatterns.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_xmlpatterns_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\qt_functions.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\qt_config.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\win32-g++\qmake.conf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\spec_post.prf .qmake.stash D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\exclusive_builds.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\toolchain.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\default_pre.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\win32\default_pre.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\resolve_config.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\exclusive_builds_post.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\default_post.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\build_pass.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\precompile_header.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\warn_on.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\qt.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\resources.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\moc.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\win32\opengl.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\uic.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\qmake_use.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\file_copies.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\win32\windows.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\testcase_targets.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\exceptions.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\yacc.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\lex.prf ..\CanFcDisplay\CanFcDisplay.pro D:\SoftWare\QT\5.9.8\mingw53_32\lib\qtmaind.prl D:\SoftWare\QT\5.9.8\mingw53_32\lib\Qt5Widgetsd.prl D:\SoftWare\QT\5.9.8\mingw53_32\lib\Qt5Guid.prl D:\SoftWare\QT\5.9.8\mingw53_32\lib\Qt5SerialPortd.prl D:\SoftWare\QT\5.9.8\mingw53_32\lib\Qt5Cored.prl    D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\data\dummy.cpp ..\CanFcDisplay\mainwindow.h ..\CanFcDisplay\main.cpp ..\CanFcDisplay\mainwindow.cpp ..\CanFcDisplay\mainwindow.ui    
+	$(ZIP) CanFcDisplay.zip $(SOURCES) $(DIST) ..\CanFcDisplay\CanFcDisplay.pro D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\spec_pre.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\qdevice.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\device_config.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\common\sanitize.conf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\common\gcc-base.conf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\common\g++-base.conf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\common\angle.conf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\qconfig.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3danimation.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3danimation_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dcore.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dcore_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dextras.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dextras_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dinput.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dinput_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dlogic.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dlogic_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquick.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquick_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickanimation.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickanimation_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickextras.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickextras_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickinput.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickinput_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickrender.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickrender_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickscene2d.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3dquickscene2d_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3drender.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_3drender_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_accessibility_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_axbase.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_axbase_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_axcontainer.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_axcontainer_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_axserver.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_axserver_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_bluetooth.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_bluetooth_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_bootstrap_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_charts.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_charts_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_concurrent.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_concurrent_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_core.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_core_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_datavisualization.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_datavisualization_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_dbus.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_dbus_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_designer.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_designer_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_designercomponents_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_devicediscovery_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_egl_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_eventdispatcher_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_fb_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_fontdatabase_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_gamepad.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_gamepad_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_gui.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_gui_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_help.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_help_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_location.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_location_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_multimedia.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_multimedia_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_multimediawidgets.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_multimediawidgets_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_network.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_network_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_networkauth.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_networkauth_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_nfc.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_nfc_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_opengl.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_opengl_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_openglextensions.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_openglextensions_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_packetprotocol_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_platformcompositor_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_positioning.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_positioning_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_printsupport.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_printsupport_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_purchasing.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_purchasing_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_qml.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_qml_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_qmldebug_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_qmldevtools_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_qmltest.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_qmltest_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quick.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quick_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quickcontrols2.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quickcontrols2_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quickparticles_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quicktemplates2_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quickwidgets.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_quickwidgets_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_remoteobjects.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_remoteobjects_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_repparser.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_repparser_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_script.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_script_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_scripttools.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_scripttools_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_scxml.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_scxml_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_sensors.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_sensors_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_serialbus.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_serialbus_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_serialport.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_serialport_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_sql.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_sql_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_svg.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_svg_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_testlib.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_testlib_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_texttospeech.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_texttospeech_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_theme_support_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_uiplugin.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_uitools.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_uitools_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_webchannel.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_webchannel_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_websockets.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_websockets_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_widgets.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_widgets_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_winextras.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_winextras_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_xml.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_xml_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_xmlpatterns.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\modules\qt_lib_xmlpatterns_private.pri D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\qt_functions.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\qt_config.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\win32-g++\qmake.conf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\spec_post.prf .qmake.stash D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\exclusive_builds.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\toolchain.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\default_pre.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\win32\default_pre.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\resolve_config.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\exclusive_builds_post.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\default_post.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\build_pass.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\win32\console.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\precompile_header.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\warn_on.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\qt.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\resources.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\moc.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\win32\opengl.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\uic.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\qmake_use.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\file_copies.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\testcase_targets.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\exceptions.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\yacc.prf D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\lex.prf ..\CanFcDisplay\CanFcDisplay.pro ..\CanFcDisplay\img.qrc D:\SoftWare\QT\5.9.8\mingw53_32\lib\Qt5Widgetsd.prl D:\SoftWare\QT\5.9.8\mingw53_32\lib\Qt5Guid.prl D:\SoftWare\QT\5.9.8\mingw53_32\lib\Qt5SerialPortd.prl D:\SoftWare\QT\5.9.8\mingw53_32\lib\Qt5Cored.prl   ..\CanFcDisplay\img.qrc D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\data\dummy.cpp ..\CanFcDisplay\mainwindow.h ..\CanFcDisplay\main.cpp ..\CanFcDisplay\mainwindow.cpp ..\CanFcDisplay\mainwindow.ui    
 
 clean: compiler_clean 
-	-$(DEL_FILE) debug\main.o debug\mainwindow.o debug\moc_mainwindow.o
+	-$(DEL_FILE) debug\main.o debug\mainwindow.o debug\qrc_img.o debug\moc_mainwindow.o
+	-$(DEL_FILE) debug\logo_res.o
 
 distclean: clean 
 	-$(DEL_FILE) .qmake.stash
@@ -92,13 +98,19 @@ benchmark: first
 
 compiler_no_pch_compiler_make_all:
 compiler_no_pch_compiler_clean:
-compiler_rcc_make_all:
+compiler_rcc_make_all: debug/qrc_img.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) debug\qrc_img.cpp
+debug/qrc_img.cpp: ../CanFcDisplay/img.qrc \
+		D:/SoftWare/QT/5.9.8/mingw53_32/bin/rcc.exe \
+		../CanFcDisplay/img/logo.ico
+	D:\SoftWare\QT\5.9.8\mingw53_32\bin\rcc.exe -name img ..\CanFcDisplay\img.qrc -o debug\qrc_img.cpp
+
 compiler_moc_predefs_make_all: debug/moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) debug\moc_predefs.h
 debug/moc_predefs.h: D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/data/dummy.cpp
-	g++ -fno-keep-inline-dllexport -g -std=gnu++11 -Wall -W -Wextra -dM -E -o debug\moc_predefs.h D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\data\dummy.cpp
+	g++ -fno-keep-inline-dllexport -fexceptions -g -std=gnu++11 -Wall -W -Wextra -dM -E -o debug\moc_predefs.h D:\SoftWare\QT\5.9.8\mingw53_32\mkspecs\features\data\dummy.cpp
 
 compiler_moc_header_make_all: debug/moc_mainwindow.cpp
 compiler_moc_header_clean:
@@ -206,6 +218,7 @@ debug/moc_mainwindow.cpp: D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QMai
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtGui/qtouchdevice.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qtabwidget.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtGui/qicon.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QFile \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtSerialPort/QSerialPort \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtSerialPort/qserialport.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtSerialPort/qserialportglobal.h \
@@ -215,6 +228,14 @@ debug/moc_mainwindow.cpp: D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QMai
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qmessagebox.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qdialog.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QDebug \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QTimer \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/qtimer.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/qbasictimer.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QButtonGroup \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qbuttongroup.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QTextStream \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QTextCodec \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/qtextcodec.h \
 		../CanFcDisplay/mainwindow.h \
 		debug/moc_predefs.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/bin/moc.exe
@@ -235,7 +256,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 
 
@@ -345,6 +366,7 @@ debug/main.o: ../CanFcDisplay/main.cpp ../CanFcDisplay/mainwindow.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtGui/qtouchdevice.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qtabwidget.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtGui/qicon.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QFile \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtSerialPort/QSerialPort \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtSerialPort/qserialport.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtSerialPort/qserialportglobal.h \
@@ -354,6 +376,14 @@ debug/main.o: ../CanFcDisplay/main.cpp ../CanFcDisplay/mainwindow.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qmessagebox.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qdialog.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QDebug \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QTimer \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/qtimer.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/qbasictimer.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QButtonGroup \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qbuttongroup.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QTextStream \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QTextCodec \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/qtextcodec.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QApplication \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qapplication.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/qcoreapplication.h \
@@ -467,6 +497,7 @@ debug/mainwindow.o: ../CanFcDisplay/mainwindow.cpp ../CanFcDisplay/mainwindow.h 
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtGui/qtouchdevice.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qtabwidget.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtGui/qicon.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QFile \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtSerialPort/QSerialPort \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtSerialPort/qserialport.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtSerialPort/qserialportglobal.h \
@@ -476,6 +507,14 @@ debug/mainwindow.o: ../CanFcDisplay/mainwindow.cpp ../CanFcDisplay/mainwindow.h 
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qmessagebox.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qdialog.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QDebug \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QTimer \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/qtimer.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/qbasictimer.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QButtonGroup \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qbuttongroup.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QTextStream \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QTextCodec \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/qtextcodec.h \
 		ui_mainwindow.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QVariant \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QAction \
@@ -488,11 +527,6 @@ debug/mainwindow.o: ../CanFcDisplay/mainwindow.cpp ../CanFcDisplay/mainwindow.h 
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qdesktopwidget.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtGui/qguiapplication.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtGui/qinputmethod.h \
-		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QButtonGroup \
-		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qbuttongroup.h \
-		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QCheckBox \
-		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qcheckbox.h \
-		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QComboBox \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qcombobox.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qabstractitemdelegate.h \
@@ -530,10 +564,21 @@ debug/mainwindow.o: ../CanFcDisplay/mainwindow.cpp ../CanFcDisplay/mainwindow.h 
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtGui/qtextoption.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QPushButton \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qpushbutton.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qabstractbutton.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QRadioButton \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/qradiobutton.h \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QSpacerItem \
 		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QVBoxLayout \
-		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QWidget
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtWidgets/QWidget \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QDateTime \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/qdatetime.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/QDir \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/qdir.h \
+		D:/SoftWare/QT/5.9.8/mingw53_32/include/QtCore/qfileinfo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\mainwindow.o ..\CanFcDisplay\mainwindow.cpp
+
+debug/qrc_img.o: debug/qrc_img.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\qrc_img.o debug\qrc_img.cpp
 
 debug/moc_mainwindow.o: debug/moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o debug\moc_mainwindow.o debug\moc_mainwindow.cpp

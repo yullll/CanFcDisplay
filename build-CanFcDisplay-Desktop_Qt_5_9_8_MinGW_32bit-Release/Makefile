@@ -218,6 +218,7 @@ Makefile: ../CanFcDisplay/CanFcDisplay.pro D:/SoftWare/QT/5.9.8/mingw53_32/mkspe
 		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/resolve_config.prf \
 		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/exclusive_builds_post.prf \
 		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/default_post.prf \
+		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/win32/console.prf \
 		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/precompile_header.prf \
 		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/warn_on.prf \
 		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/qt.prf \
@@ -227,13 +228,11 @@ Makefile: ../CanFcDisplay/CanFcDisplay.pro D:/SoftWare/QT/5.9.8/mingw53_32/mkspe
 		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/uic.prf \
 		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/qmake_use.prf \
 		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/file_copies.prf \
-		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/win32/windows.prf \
 		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/testcase_targets.prf \
 		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/exceptions.prf \
 		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/yacc.prf \
 		D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/lex.prf \
 		../CanFcDisplay/CanFcDisplay.pro \
-		D:/SoftWare/QT/5.9.8/mingw53_32/lib/qtmain.prl \
 		D:/SoftWare/QT/5.9.8/mingw53_32/lib/Qt5Widgets.prl \
 		D:/SoftWare/QT/5.9.8/mingw53_32/lib/Qt5Gui.prl \
 		D:/SoftWare/QT/5.9.8/mingw53_32/lib/Qt5SerialPort.prl \
@@ -396,6 +395,7 @@ D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/win32/default_pre.prf:
 D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/resolve_config.prf:
 D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/exclusive_builds_post.prf:
 D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/default_post.prf:
+D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/win32/console.prf:
 D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/precompile_header.prf:
 D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/warn_on.prf:
 D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/qt.prf:
@@ -405,13 +405,11 @@ D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/win32/opengl.prf:
 D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/uic.prf:
 D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/qmake_use.prf:
 D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/file_copies.prf:
-D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/win32/windows.prf:
 D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/testcase_targets.prf:
 D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/exceptions.prf:
 D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/yacc.prf:
 D:/SoftWare/QT/5.9.8/mingw53_32/mkspecs/features/lex.prf:
 ../CanFcDisplay/CanFcDisplay.pro:
-D:/SoftWare/QT/5.9.8/mingw53_32/lib/qtmain.prl:
 D:/SoftWare/QT/5.9.8/mingw53_32/lib/Qt5Widgets.prl:
 D:/SoftWare/QT/5.9.8/mingw53_32/lib/Qt5Gui.prl:
 D:/SoftWare/QT/5.9.8/mingw53_32/lib/Qt5SerialPort.prl:
